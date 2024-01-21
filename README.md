@@ -1,1 +1,1 @@
-# General-Purpose-ESP32-Lib
+# General-Purpose-ESP32-Template
