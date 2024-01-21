@@ -2,6 +2,7 @@
 
 #define WIFI_DEBUG false
 #define MQTT_DEBUG true
+#define STORAGE_HANDLER_DEBUG true
 
 #define ENABLE_DEBUG true
 

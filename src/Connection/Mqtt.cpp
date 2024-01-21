@@ -26,7 +26,7 @@ bool Mqtt::connect(String server, String port)
     Client.setServer(server.c_str(), port.toInt());
     Client.setCallback([this](char *topic, byte *payload, unsigned int length)
                        { this->callback(topic, payload, length); });
-    Client.setBufferSize(MQTT_MAX_PACKET_SIZE);
+    Client.setBufferSize(MQTT_MAX_PACKET_SIZE_LOCAL);
 
     TimerReconnect.setInterval(DEFAULT_RECONNECT_INTERVAL);
     TimerReconnect.setCallback([this]()

@@ -22,7 +22,7 @@
 #define DEBUG_PRINTF(x, y)
 #endif
 
-#define MQTT_MAX_PACKET_SIZE 4096
+#define MQTT_MAX_PACKET_SIZE_LOCAL 4096
 #define DEFAULT_RECONNECT_INTERVAL 1000
 
 /// @brief A class to handle MQTT connection
