@@ -25,6 +25,7 @@
 #define MQTT_MAX_PACKET_SIZE 4096
 #define DEFAULT_RECONNECT_INTERVAL 1000
 
+/// @brief A class to handle MQTT connection
 class Mqtt
 {
 private:
@@ -33,7 +34,8 @@ private:
     SimpleTimer TimerReconnect;
 
     String idClient;
-    String last_message;
+    String previous_msg;
+    String latest_msg;
     String server;
     String port;
 
@@ -45,86 +47,22 @@ public:
     Mqtt(String ID_Client);
     ~Mqtt();
 
+    bool connect(String server, String port = "1883");
     bool reconnect();
-    void setReconnectInterval(unsigned long interval);
-    bool connect(String server, String port);
     void disconnect();
-    bool send();
-    String lastMessage();
+
+    String latestMsg();
+    String previousMsg();
+    bool sendMsg(String topic, String msg);
+    
     bool isConnected();
     bool isDataAvailable();
+    
+    void loop();
+
+    void setReconnectInterval(unsigned long interval);
     void setOnDataAvailable(void (*callback)());
     void setOnConnected(void (*callback)());
-    void loop();
 };
 
-Mqtt::Mqtt(String ID_Client) : Client(), WifiClient()
-{
-    idClient = ID_Client;
-    last_message = "";
-    onDataAvailable = NULL;
-    Client.setClient(WifiClient);
-}
-
-Mqtt::~Mqtt()
-{
-}
-
-void Mqtt::setReconnectInterval(unsigned long interval)
-{
-    TimerReconnect.setInterval(interval);
-}
-
-bool Mqtt::connect(String server, String port)
-{
-    this->server = server;
-    this->port = port;
-
-
-    Client.setServer(server.c_str(), port.toInt());
-    Client.setCallback([this](char *topic, byte *payload, unsigned int length)
-                       { this->callback(topic, payload, length); });
-    Client.setBufferSize(MQTT_MAX_PACKET_SIZE);
-
-    TimerReconnect.setInterval(DEFAULT_RECONNECT_INTERVAL);
-    TimerReconnect.setCallback([this]()
-                               { this->reconnect(); });
-
-    DEBUG_PRINTLN(WiFi.isConnected() == WL_CONNECTED ? "[info] WiFi is connected" : "[Warning] WiFi is not connected");
-    
-    bool result = Client.connect(idClient.c_str());
-
-    DEBUG_PRINTF("MQTT is %s", result ? "connected" : "not connected");
-
-    return result;
-}
-
-bool Mqtt::reconnect()
-{
-    bool result = Client.connect(idClient.c_str()); 
-    DEBUG_PRINTF("MQTT is %s", result ? "connected" : "not connected");
-    return result;
-}
-
-void Mqtt::loop()
-{
-    TimerReconnect.loop();
-    if (Client.connected())
-    {
-        // Reconnect MQTT Disable, loop Client
-        TimerReconnect.setEnable(false);
-        Client.loop();
-    }
-    else
-    {
-        // Reconnect MQTT Enable
-        TimerReconnect.setEnable(true);
-    }
-}
-
 #endif // MQTT_H
-
-// void connectCallback(Mqtt* mqtt)
-// {
-//     mqtt->connect(server, port);
-// }
