@@ -1,12 +1,20 @@
 #include <Arduino.h>
 
-// define debug
+// DEBUG
 #define ENABLE_DEBUG true
 
 #ifdef ENABLE_DEBUG
-#define WIFI_DEBUG false
-#define MQTT_DEBUG true
+#define WIFI_DEBUG true
+#define MQTT_DEBUG false
 #define STORAGE_HANDLER_DEBUG true
+#endif
+
+// TESTING
+#define TESTING true
+
+#if TESTING == true
+#define STORAGE_HANDLER_TEST true
+
 #endif
 
 

@@ -7,7 +7,7 @@
 #include <Utility/SimpleTimer.h>
 
 #if ENABLE_DEBUG == true
-#if MQTT_DEBUG == true
+#if WIFI_DEBUG == true
 #define DEBUG_PRINT(x) Serial.print(x)
 #define DEBUG_PRINTLN(x) Serial.println(x)
 #define DEBUG_PRINTF(x, y) Serial.printf(x, y)
@@ -51,7 +51,7 @@ public:
     ~WiFiManagerPlus();
 
     bool begin(String APName = "ESP32-WM", String APPassword = "12345678", WiFiManagerPlusMode mode = WMPS_AUTOCONNECT, int timeout = 60);
-    bool reconnect();
+    void reconnect();
     void disconnect();
     bool isConnected();
 
